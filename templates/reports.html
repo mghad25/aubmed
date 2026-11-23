@@ -1,0 +1,14 @@
+{% extends 'base.html' %}{% block title %}Reports{% endblock %}
+{% block body %}
+<h1>Reports</h1>
+<p class="muted">These are the queries from Chapter 7 (sql/03_queries.sql), run live on the database.</p>
+<div class="qlist">{% for x in qs %}<a href="{{ url_for('reports', q=x.id) }}" class="{{ 'on' if x.id == cur.id }}">{{ x.id }}</a>{% endfor %}</div>
+<h2>{{ cur.title }}</h2>
+<p>{{ cur.desc }}</p>
+<details><summary>Show SQL</summary><pre>{{ cur.sql }}</pre></details>
+<table>
+  <tr>{% for c in cols %}<th>{{ c }}</th>{% endfor %}</tr>
+  {% for r in rows %}<tr>{% for v in r %}<td>{{ '' if v is none else v }}</td>{% endfor %}</tr>{% endfor %}
+</table>
+<p class="muted">{{ rows|length }} row{{ '' if rows|length == 1 else 's' }}</p>
+{% endblock %}

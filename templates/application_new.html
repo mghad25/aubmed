@@ -1,0 +1,17 @@
+{% extends 'base.html' %}{% block title %}Submit application{% endblock %}
+{% block body %}
+<p class="crumb"><a href="{{ url_for('applications') }}">Applications</a> / new</p>
+<h1>Submit application</h1>
+{% set pre = f.applicant or request.args.get('applicant', '') %}
+<form method="post" class="form">
+  <label>Applicant *<select name="applicant" required><option value="">Choose...</option>
+    {% for a in applicants %}<option value="{{ a.ApplicantID }}" {{ 'selected' if pre == a.ApplicantID|string }}>{{ a.ApplicantID }} - {{ a.FirstName }} {{ a.LastName }}</option>{% endfor %}</select></label>
+  <label>Program *<select name="program" required><option value="">Choose...</option>
+    {% for p in programs %}<option value="{{ p.ProgramID }}" {{ 'selected' if f.program == p.ProgramID }}>{{ p.ProgramID }} - {{ p.ProgramName }}</option>{% endfor %}</select></label>
+  <label>Admission year (Fall intake) *<input type="number" name="year" required min="2023" max="2100" value="{{ f.year or 2027 }}"></label>
+  <label>Submission date *<input type="date" name="subdate" required value="{{ f.subdate or today }}"></label>
+  <label>Round *<select name="round">{% for s in ['Regular','Early'] %}<option {{ 'selected' if f.round == s }}>{{ s }}</option>{% endfor %}</select></label>
+  <button>Submit</button>
+</form>
+<p class="muted">Term is always Fall (BR4) and status starts as Submitted (defaults). The database refuses a fourth application in the same cycle, a second application to the same program in the same cycle (BR3), and an Early application after 15 December (BR6).</p>
+{% endblock %}

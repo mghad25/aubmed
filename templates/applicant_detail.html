@@ -1,0 +1,24 @@
+{% extends 'base.html' %}{% block title %}{{ a.FirstName }} {{ a.LastName }}{% endblock %}
+{% block body %}
+<p class="crumb"><a href="{{ url_for('applicants') }}">Applicants</a> / {{ a.ApplicantID }}</p>
+<h1>{{ a.FirstName }} {{ a.MiddleName or '' }} {{ a.LastName }}</h1>
+<dl class="facts">
+  <dt>Applicant ID</dt><dd>{{ a.ApplicantID }}</dd>
+  <dt>Passport no.</dt><dd>{{ a.PassportNo }}</dd>
+  <dt>Date of birth</dt><dd>{{ a.DateOfBirth }} (age {{ a.Age }}, derived)</dd>
+  <dt>Email</dt><dd>{{ a.Email }}</dd>
+  <dt>Phone numbers</dt><dd>{% for p in phones %}{{ p.PhoneNumber }}{{ ', ' if not loop.last }}{% endfor %}</dd>
+  <dt>Nationalities</dt><dd>{% for n in nats %}{{ n.CountryCode }}{{ ', ' if not loop.last }}{% endfor %}</dd>
+</dl>
+<div class="head"><h2>Applications</h2><a class="btn" href="{{ url_for('application_new') }}?applicant={{ a.ApplicantID }}">+ New application</a></div>
+{% if apps %}
+<table>
+  <tr><th>#</th><th>Program</th><th>Year</th><th>Round</th><th>Status</th><th class="n">Avg score</th><th>Decision</th></tr>
+  {% for r in apps %}
+  <tr><td><a href="{{ url_for('application_detail', app_id=r.ApplicationID) }}">{{ r.ApplicationID }}</a></td><td>{{ r.ProgramName }}</td>
+      <td>{{ r.AdmissionYear }}</td><td>{{ r.AdmissionRound }}</td><td><span class="tag">{{ r.ApplicationStatus }}</span></td>
+      <td class="n">{{ r.AverageReviewScore if r.AverageReviewScore is not none else '' }}</td><td>{{ r.DecisionType or '' }}</td></tr>
+  {% endfor %}
+</table>
+{% else %}<p class="muted">No applications yet. An applicant may submit 0 to 3 applications per cycle.</p>{% endif %}
+{% endblock %}

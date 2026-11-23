@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Admissions Database{% endblock %} | AUB Mediterraneo Admissions</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="{{ url_for('index') }}">AUB Mediterraneo <span>Admissions Database</span></a>
+    <nav>
+      <a href="{{ url_for('index') }}" class="{{ 'on' if request.endpoint == 'index' }}">Dashboard</a>
+      <a href="{{ url_for('applicants') }}" class="{{ 'on' if request.endpoint and request.endpoint.startswith('applicant') }}">Applicants</a>
+      <a href="{{ url_for('applications') }}" class="{{ 'on' if request.endpoint and request.endpoint.startswith('application') }}">Applications</a>
+      <a href="{{ url_for('reports') }}" class="{{ 'on' if request.endpoint == 'reports' }}">Reports</a>
+    </nav>
+  </div>
+</header>
+<main class="wrap">
+  {% with msgs = get_flashed_messages(with_categories=true) %}
+    {% for cat, m in msgs %}<div class="flash {{ cat }}">{{ m }}</div>{% endfor %}
+  {% endwith %}
+  {% block body %}{% endblock %}
+</main>
+<footer class="wrap">INDE 513 Information Systems, Project Phase II. Student project with fictional sample data. Flask + SQLite.</footer>
+</body>
+</html>

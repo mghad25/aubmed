@@ -1,0 +1,17 @@
+{% extends 'base.html' %}{% block title %}Applicants{% endblock %}
+{% block body %}
+<div class="head"><h1>Applicants</h1><a class="btn" href="{{ url_for('applicant_new') }}">+ Add applicant</a></div>
+<form class="search" method="get">
+  <input name="q" value="{{ term }}" placeholder="Search by name, passport number, email or ID">
+  <button>Search</button>{% if term %}<a href="{{ url_for('applicants') }}">Clear</a>{% endif %}
+</form>
+<p class="muted">{{ rows|length }} applicant{{ '' if rows|length == 1 else 's' }}{% if term %} matching "{{ term }}"{% endif %}</p>
+<table>
+  <tr><th>ID</th><th>Name</th><th>Passport</th><th>Email</th><th class="n">Age</th><th>Nationality</th><th class="n">Applications</th></tr>
+  {% for r in rows %}
+  <tr><td><a href="{{ url_for('applicant_detail', aid=r.ApplicantID) }}">{{ r.ApplicantID }}</a></td>
+      <td>{{ r.FirstName }} {{ r.MiddleName or '' }} {{ r.LastName }}</td><td>{{ r.PassportNo }}</td><td>{{ r.Email }}</td>
+      <td class="n">{{ r.Age }}</td><td>{{ r.Nats }}</td><td class="n">{{ r.NumApps }}</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

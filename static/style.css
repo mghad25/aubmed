@@ -1,0 +1,53 @@
+:root { --c: #7a1131; --bg: #f6f4f2; --line: #ddd6d0; --ink: #222; --muted: #6b6560; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif; color: var(--ink); background: var(--bg); font-size: 15px; }
+a { color: var(--c); }
+.wrap { max-width: 1180px; margin: 0 auto; padding: 0 20px; }
+header { background: var(--c); color: #fff; }
+.bar { display: flex; align-items: center; justify-content: space-between; height: 58px; gap: 16px; flex-wrap: wrap; }
+.brand { color: #fff; text-decoration: none; font-weight: 700; font-size: 18px; }
+.brand span { font-weight: 400; opacity: .85; }
+nav a { color: #fff; text-decoration: none; margin-left: 18px; padding: 6px 2px; opacity: .85; }
+nav a.on, nav a:hover { opacity: 1; border-bottom: 2px solid #fff; }
+main { padding: 18px 20px 30px; }
+h1 { font-size: 26px; margin: 10px 0 14px; }
+h2 { font-size: 18px; margin: 18px 0 8px; }
+.head { display: flex; justify-content: space-between; align-items: center; }
+.btn, button { background: var(--c); color: #fff; border: 0; padding: 8px 14px; border-radius: 6px; cursor: pointer; text-decoration: none; font-size: 14px; }
+button.ghost { background: transparent; color: var(--muted); border: 1px solid var(--line); }
+table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid var(--line); font-size: 14px; }
+th, td { text-align: left; padding: 7px 9px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { background: #efe9e4; font-weight: 600; }
+td.n, th.n { text-align: right; }
+.cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 8px; }
+.card { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; }
+.card b { display: block; font-size: 28px; color: var(--c); }
+.card span { color: var(--muted); }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.muted { color: var(--muted); font-size: 13px; }
+.tag { display: inline-block; padding: 1px 8px; border-radius: 10px; background: #ece6e1; font-size: 12px; white-space: nowrap; }
+.tag.big { font-size: 14px; padding: 3px 10px; vertical-align: middle; }
+.tag.accepted { background: #dcefdc; color: #1d5e20; }
+.tag.rejected { background: #f6dcdc; color: #8a1d1d; }
+.tag.waitlisted { background: #f8ecd0; color: #7a5a10; }
+.flash { padding: 10px 14px; border-radius: 6px; margin: 6px 0 12px; }
+.flash.ok { background: #dcefdc; } .flash.error { background: #f6dcdc; color: #7a1010; font-weight: 600; }
+.search, .filters { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; align-items: center; }
+.search input { flex: 1; min-width: 240px; }
+input, select { padding: 7px 9px; border: 1px solid var(--line); border-radius: 6px; font-size: 14px; background: #fff; }
+.form { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 20px; max-width: 760px; background: #fff; padding: 18px; border: 1px solid var(--line); border-radius: 8px; }
+.form label { display: flex; flex-direction: column; gap: 4px; font-weight: 600; font-size: 14px; }
+.form small { font-weight: 400; color: var(--muted); }
+.form button { grid-column: span 2; justify-self: start; }
+form.inline { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+form.inline input[name=comments] { flex: 1; }
+dl.facts { display: grid; grid-template-columns: 190px 1fr; gap: 6px 12px; background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 14px 18px; margin: 0 0 8px; }
+dl.facts dt { color: var(--muted); } dl.facts dd { margin: 0; }
+.crumb { color: var(--muted); margin: 6px 0 0; font-size: 13px; }
+.qlist { display: flex; flex-wrap: wrap; gap: 6px; }
+.qlist a { padding: 5px 10px; border: 1px solid var(--line); border-radius: 6px; background: #fff; text-decoration: none; }
+.qlist a.on { background: var(--c); color: #fff; }
+pre { background: #fff; border: 1px solid var(--line); padding: 10px; overflow-x: auto; font-size: 13px; }
+.reset { margin-top: 24px; }
+footer { color: var(--muted); font-size: 12px; padding: 14px 20px 30px; }
+@media (max-width: 800px) { .cards, .grid2, .form { grid-template-columns: 1fr; } .form button { grid-column: auto; } }

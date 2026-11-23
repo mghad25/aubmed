@@ -1,0 +1,17 @@
+{% extends 'base.html' %}{% block title %}Add applicant{% endblock %}
+{% block body %}
+<p class="crumb"><a href="{{ url_for('applicants') }}">Applicants</a> / new</p>
+<h1>Add applicant</h1>
+<form method="post" class="form">
+  <label>First name *<input name="first" required maxlength="30" value="{{ f.first }}"></label>
+  <label>Middle name<input name="middle" maxlength="30" value="{{ f.middle }}"></label>
+  <label>Last name *<input name="last" required maxlength="30" value="{{ f.last }}"></label>
+  <label>Passport number * <small>6 to 12 characters</small><input name="passport" required minlength="6" maxlength="12" value="{{ f.passport }}"></label>
+  <label>Date of birth *<input type="date" name="dob" required value="{{ f.dob }}"></label>
+  <label>Email *<input type="email" name="email" required maxlength="60" value="{{ f.email }}"></label>
+  <label>Phone number(s) * <small>with country code, comma-separated</small><input name="phones" required placeholder="+35799123456" value="{{ f.phones }}"></label>
+  <label>Nationality code(s) * <small>3 letters, comma-separated</small><input name="nats" required placeholder="CYP, LBN" value="{{ f.nats }}"></label>
+  <button>Save applicant</button>
+</form>
+<p class="muted">Saved in one transaction to Applicant, ApplicantPhone and ApplicantNationality. The database rejects a passport number that is already used (BR24).</p>
+{% endblock %}

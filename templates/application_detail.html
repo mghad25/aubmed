@@ -1,0 +1,54 @@
+{% extends 'base.html' %}{% block title %}Application {{ s.ApplicationID }}{% endblock %}
+{% block body %}
+<p class="crumb"><a href="{{ url_for('applications') }}">Applications</a> / {{ s.ApplicationID }}</p>
+<h1>Application {{ s.ApplicationID }} <span class="tag big">{{ s.ApplicationStatus }}</span></h1>
+<dl class="facts">
+  <dt>Applicant</dt><dd><a href="{{ url_for('applicant_detail', aid=s.ApplicantID) }}">{{ s.ApplicantName }}</a></dd>
+  <dt>Program</dt><dd>{{ s.ProgramName }} ({{ s.DegreeLevel }}), {{ s.DepartmentName }}</dd>
+  <dt>Cycle</dt><dd>Fall {{ s.AdmissionYear }}, {{ s.AdmissionRound }} round</dd>
+  <dt>Submitted</dt><dd>{{ s.SubmissionDate }} ({{ s.DaysSinceSubmission }} days ago)</dd>
+  <dt>Average review score</dt><dd>{{ s.AverageReviewScore if s.AverageReviewScore is not none else 'no reviews yet' }} <small>(derived, from {{ s.ReviewCount }} review{{ '' if s.ReviewCount == 1 else 's' }})</small></dd>
+</dl>
+<div class="grid2">
+<section>
+  <h2>Documents</h2>
+  <table><tr><th>No.</th><th>Type</th><th>Uploaded</th></tr>
+  {% for d in docs %}<tr><td>{{ d.DocumentNo }}</td><td>{{ d.DocumentType }}</td><td>{{ d.UploadDate }}</td></tr>{% else %}<tr><td colspan="3" class="muted">None uploaded</td></tr>{% endfor %}</table>
+  <p class="muted">Mandatory for this program: {% for r in required %}{{ r.RequirementName }}{{ '; ' if not loop.last }}{% endfor %}</p>
+</section>
+<section>
+  <h2>Reviews</h2>
+  <table><tr><th>Professor</th><th class="n">Score</th><th>Date</th><th>Comments</th></tr>
+  {% for r in reviews %}<tr><td>{{ r.ProfessorName }}</td><td class="n">{{ r.ReviewScore }}</td><td>{{ r.ReviewDate }}</td><td>{{ r.Comments or '' }}</td></tr>{% else %}<tr><td colspan="4" class="muted">No reviews yet</td></tr>{% endfor %}</table>
+  {% if not decision and reviews|length < 3 %}
+  <form method="post" action="{{ url_for('review_add', app_id=s.ApplicationID) }}" class="inline">
+    <select name="professor" required><option value="">Reviewer ({{ s.DepartmentID }})...</option>{% for p in profs %}<option value="{{ p.ProfessorID }}">{{ p.FirstName }} {{ p.LastName }}</option>{% endfor %}</select>
+    <input type="number" name="score" min="0" max="100" required placeholder="Score 0-100">
+    <input type="date" name="rdate" required value="{{ today }}">
+    <input name="comments" maxlength="500" placeholder="Comments (optional)">
+    <button>Add review</button>
+  </form>{% endif %}
+</section>
+</div>
+<div class="grid2">
+<section>
+  <h2>Decision</h2>
+  {% if decision %}<p><span class="tag big {{ decision.DecisionType|lower }}">{{ decision.DecisionType }}</span> on {{ decision.DecisionDate }}</p>
+  {% else %}
+  <form method="post" action="{{ url_for('decision_add', app_id=s.ApplicationID) }}" class="inline">
+    <select name="dtype">{% for t in ['Accepted','Rejected','Waitlisted'] %}<option>{{ t }}</option>{% endfor %}</select>
+    <input type="date" name="ddate" required value="{{ today }}"><button>Record decision</button>
+  </form><p class="muted">Needs at least 2 reviews (BR18).</p>{% endif %}
+</section>
+<section>
+  <h2>Financial aid</h2>
+  {% if aid %}<p>{{ aid.AidType }}: <b>{{ aid.AidPercentage }}%</b> of tuition</p>
+  {% elif decision and decision.DecisionType == 'Accepted' %}
+  <form method="post" action="{{ url_for('aid_add', app_id=s.ApplicationID) }}" class="inline">
+    <select name="aidtype">{% for t in ['Need-Based','Early Merit','Merit + Need'] %}<option>{{ t }}</option>{% endfor %}</select>
+    <input type="number" name="pct" step="0.01" min="0.01" max="100" required placeholder="% of tuition"><button>Offer aid</button>
+  </form><p class="muted">Undergraduate aid is capped at 80% (BR22).</p>
+  {% else %}<p class="muted">Aid can only be offered after an Accepted decision (BR20).</p>{% endif %}
+</section>
+</div>
+{% endblock %}

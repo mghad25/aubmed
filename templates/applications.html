@@ -1,0 +1,22 @@
+{% extends 'base.html' %}{% block title %}Applications{% endblock %}
+{% block body %}
+<div class="head"><h1>Applications</h1><a class="btn" href="{{ url_for('application_new') }}">+ Submit application</a></div>
+<form class="filters" method="get">
+  <select name="year"><option value="">All cycles</option>{% for y in years %}<option {{ 'selected' if sel.year == y.AdmissionYear|string }}>{{ y.AdmissionYear }}</option>{% endfor %}</select>
+  <select name="program"><option value="">All programs</option>{% for p in programs %}<option value="{{ p.ProgramID }}" {{ 'selected' if sel.program == p.ProgramID }}>{{ p.ProgramID }} - {{ p.ProgramName }}</option>{% endfor %}</select>
+  <select name="status"><option value="">Any status</option>{% for s in ['Submitted','Under Review','Decided'] %}<option {{ 'selected' if sel.status == s }}>{{ s }}</option>{% endfor %}</select>
+  <select name="round"><option value="">Any round</option>{% for s in ['Early','Regular'] %}<option {{ 'selected' if sel.round == s }}>{{ s }}</option>{% endfor %}</select>
+  <button>Filter</button><a href="{{ url_for('applications') }}">Clear</a>
+</form>
+<p class="muted">{{ rows|length }} application{{ '' if rows|length == 1 else 's' }}</p>
+<table>
+  <tr><th>#</th><th>Applicant</th><th>Program</th><th>Year</th><th>Round</th><th>Submitted</th><th>Status</th><th class="n">Reviews</th><th class="n">Avg</th><th>Decision</th></tr>
+  {% for r in rows %}
+  <tr><td><a href="{{ url_for('application_detail', app_id=r.ApplicationID) }}">{{ r.ApplicationID }}</a></td>
+      <td><a href="{{ url_for('applicant_detail', aid=r.ApplicantID) }}">{{ r.ApplicantName }}</a></td><td>{{ r.ProgramID }}</td>
+      <td>{{ r.AdmissionYear }}</td><td>{{ r.AdmissionRound }}</td><td>{{ r.SubmissionDate }}</td><td><span class="tag">{{ r.ApplicationStatus }}</span></td>
+      <td class="n">{{ r.ReviewCount }}</td><td class="n">{{ r.AverageReviewScore if r.AverageReviewScore is not none else '' }}</td>
+      <td>{% if r.DecisionType %}<span class="tag {{ r.DecisionType|lower }}">{{ r.DecisionType }}</span>{% endif %}</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}
